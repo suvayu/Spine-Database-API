@@ -31,7 +31,7 @@ class TestDatapackageConnector(unittest.TestCase):
 
     def test_header_on(self):
         data = [["a", "b"], ["1.1", "2.2"]]
-        with test_datapackage(data) as package_path:
+        with check_datapackage(data) as package_path:
             reader = DataPackageConnector(None)
             reader.connect_to_source(str(package_path))
             data_iterator, header = reader.get_data_iterator("test_data", {"has_header": True})
@@ -40,7 +40,7 @@ class TestDatapackageConnector(unittest.TestCase):
 
     def test_header_off(self):
         data = [["a", "b"], ["1.1", "2.2"]]
-        with test_datapackage(data) as package_path:
+        with check_datapackage(data) as package_path:
             reader = DataPackageConnector(None)
             reader.connect_to_source(str(package_path))
             data_iterator, header = reader.get_data_iterator("test_data", {"has_header": False})
@@ -49,7 +49,7 @@ class TestDatapackageConnector(unittest.TestCase):
 
     def test_header_off_does_not_append_numbers_to_duplicate_cells(self):
         data = [["a", "a"]]
-        with test_datapackage(data) as package_path:
+        with check_datapackage(data) as package_path:
             reader = DataPackageConnector(None)
             reader.connect_to_source(str(package_path))
             data_iterator, header = reader.get_data_iterator("test_data", {"has_header": False})
@@ -58,7 +58,7 @@ class TestDatapackageConnector(unittest.TestCase):
 
 
 @contextmanager
-def test_datapackage(rows):
+def check_datapackage(rows):
     with TemporaryDirectory() as temp_dir:
         csv_file_path = Path(temp_dir, "test_data.csv")
         with open(csv_file_path, "w", newline="") as csv_file:
